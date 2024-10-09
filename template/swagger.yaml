@@ -19,7 +19,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateCCD:
     post:
       tags:
@@ -35,7 +35,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateCNMA:
     post:
       tags:
@@ -51,7 +51,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateCSA:
     post:
       tags:
@@ -67,7 +67,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateDOBA:
     post:
       tags:
@@ -83,7 +83,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateGDD:
     post:
       tags:
@@ -99,7 +99,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateHRD:
     post:
       tags:
@@ -115,7 +115,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateICA:
     post:
       tags:
@@ -131,7 +131,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateJobOffer:
     post:
       tags:
@@ -147,7 +147,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateLLA:
     post:
       tags:
@@ -163,7 +163,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateMCA:
     post:
       tags:
@@ -179,7 +179,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateNAD:
     post:
       tags:
@@ -195,7 +195,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateNDA:
     post:
       tags:
@@ -211,7 +211,23 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
+  /generateNLT:
+    post:
+      tags:
+      - NOC Landlord Template API
+      description: NOC Landlord Template
+      parameters:
+      - in: body
+        name: body
+        required: false
+        schema:
+          $ref: "#/definitions/NLTRequest"
+      responses:
+        default:
+          description: ""
+          schema:
+            $ref: "#/definitions/File"
   /generateOSAD:
     post:
       tags:
@@ -227,7 +243,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generatePSR:
     post:
       tags:
@@ -243,7 +259,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateQRD:
     post:
       tags:
@@ -259,7 +275,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateSDD:
     post:
       tags:
@@ -275,7 +291,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
   /generateSPA:
     post:
       tags:
@@ -291,7 +307,7 @@ paths:
         default:
           description: ""
           schema:
-            $ref: "#/definitions/APIResponse"
+            $ref: "#/definitions/File"
 definitions:
   APARequest:
     type: object
@@ -323,11 +339,6 @@ definitions:
       witness_2:
         type: string
       zip_code:
-        type: string
-  APIResponse:
-    type: object
-    properties:
-      message:
         type: string
   CCDRequest:
     type: object
@@ -480,6 +491,10 @@ definitions:
         type: string
       verification_day:
         type: string
+  File:
+    type: object
+    properties:
+      file: {}
   GDDRequest:
     type: object
     properties:
@@ -833,6 +848,37 @@ definitions:
       purpose:
         type: string
       witnessdetail:
+        type: string
+  NLTRequest:
+    type: object
+    properties:
+      ContactInformation:
+        type: string
+      InsertDate:
+        type: string
+      LandlordsFathersName:
+        type: string
+      LandlordsFullAddress:
+        type: string
+      LandlordsFullName:
+        type: string
+      RentalPropertyAddress:
+        type: string
+      StartDateofLeaseAgreement:
+        type: string
+      TenantsCurrentAddress:
+        type: string
+      TenantsFathersName:
+        type: string
+      TenantsFullName:
+        type: string
+      foraloan_businessregistration_passportapplication_etc:
+        type: string
+      purposeoftheNOC_eg:
+        type: string
+      residential_commercial_officespace_etc:
+        type: string
+      specificpurposeoftheNOC_eg_applying:
         type: string
   OSADRequest:
     type: object

@@ -58,7 +58,7 @@ def generateReport(input_file,output_file,param,db_connection):
         if os.path.isfile(output_file):
             print('Report generated successfully!')
             # Transfer the report to 
-            print(type(output_file))
+            return output_file
     except Exception as e:
         print(str(e))
         raise e    

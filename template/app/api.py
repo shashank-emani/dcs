@@ -17,7 +17,7 @@ REPORTS_DIR = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'reports'
 class GenerateSDD(MethodResource,Resource):
     @doc(description="Sale Deed Drafting",tags=['Sale Deed Drafting API'])
     @use_kwargs(schema.SDDRequest,location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self ,**kwargs):
          try:
             print("generateSDD")
@@ -31,14 +31,18 @@ class GenerateSDD(MethodResource,Resource):
             del parameters['password']
             print(username)
 
-            utility.generateReport("Sale_Deed_Drafting.jrxml","Sale_Deed_Drafting",parameters,db_conn,username,password) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("Sale_Deed_Drafting.jrxml","Sale_Deed_Drafting",parameters,db_conn,username,password) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']  
          except KeyError as ex:
-             utility.generateReport("Sale_Deed_Drafting.jrxml","Sale_Deed_Drafting",parameters,db_conn) 
-             return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("Sale_Deed_Drafting.jrxml","Sale_Deed_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']  
          except Exception as e:
-            print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+               print(str(e))
+               return schema.FileSchema().dump({'file':'excpetion occured'})
         
 api.add_resource(GenerateSDD,'/generateSDD')        
 docs.register(GenerateSDD)
@@ -46,7 +50,7 @@ docs.register(GenerateSDD)
 class GenerateHRD(MethodResource,Resource):
     @doc(description="Renting_in_a_Mall_Drafting_A4",tags=['Renting_in_a_Mall_Drafting_A4'])
     @use_kwargs(schema.HRDRequest,location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self ,**kwargs):
          try:
             print("generateHRD")
@@ -168,11 +172,13 @@ class GenerateHRD(MethodResource,Resource):
                'data_file': os.path.join(RESOURCES_DIR, 'lessor.json')
             }
 
-            utility.generateReport("Renting_in_a_Mall_Drafting_A4.jrxml","Renting_in_a_Mall_Drafting_A4",parameters,db_connection) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("Renting_in_a_Mall_Drafting_A4.jrxml","Renting_in_a_Mall_Drafting_A4",parameters,db_connection) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']  
          except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
 api.add_resource(GenerateHRD,'/generateHRD')        
 docs.register(GenerateHRD)
 
@@ -180,17 +186,19 @@ docs.register(GenerateHRD)
 class GeneratePSR(MethodResource, Resource):
     @doc(description="Parking space rental Deed Drafting", tags=['Parking space rental Deed Drafting API'])
     @use_kwargs(schema.PSRRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
         try:
             print("generatePSR")
             parameters=kwargs  
             db_conn=""
-            utility.generateReport("Parking_space_rental_Deed_Drafting.jrxml","Parking_space_rental_Deed_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("Parking_space_rental_Deed_Drafting.jrxml","Parking_space_rental_Deed_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']  
         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
         
 api.add_resource(GeneratePSR,'/generatePSR')        
 docs.register(GeneratePSR)
@@ -198,17 +206,19 @@ docs.register(GeneratePSR)
 class GenerateOSAD(MethodResource,Resource):
     @doc(description="Office sharing  Drafting",tags=['Office sharing  Drafting API'])
     @use_kwargs(schema.OSADRequest,location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self ,**kwargs):
          try:
             print("generateOSAD")
             parameters=kwargs  
             db_conn=""
-            utility.generateReport("Office_Sharing_Agreement_Drafting.jrxml","Office_Sharing_Agreement_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("Office_Sharing_Agreement_Drafting.jrxml","Office_Sharing_Agreement_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']           
          except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 
 api.add_resource(GenerateOSAD,'/generateOSAD')        
@@ -218,17 +228,19 @@ docs.register(GenerateOSAD)
 class GenerateSPA(MethodResource, Resource):
     @doc(description="One And The Same Person Affidavit Drafting", tags=['One And The Same Person Affidavit Drafting API'])
     @use_kwargs(schema.SPARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-        try:
+         try:
             print("generateSPA")
             parameters=kwargs  
             db_conn=""
-            utility.generateReport("One_And_The_Same_Person_Affidavit_Drafting.jrxml","One_And_The_Same_Person_Affidavit_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-        except Exception as e:
+            output_file=utility.generateReport("One_And_The_Same_Person_Affidavit_Drafting.jrxml","One_And_The_Same_Person_Affidavit_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']  
+         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
         
 api.add_resource(GenerateSPA,'/generateSPA')        
 docs.register(GenerateSPA)
@@ -238,18 +250,20 @@ docs.register(GenerateSPA)
 class GenerateAPA(MethodResource, Resource):
     @doc(description="Address Proof Affidavit Drafting", tags=['Address Proof Affidavit Drafting API'])
     @use_kwargs(schema.APARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-        try:
+         try:
             print("generateAPA")
             parameters=kwargs  
             db_conn=""
          
-            utility.generateReport("Address_Proof_Affidavit_Drafting.jrxml","Address_Proof_Affidavit_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-        except Exception as e:
+            output_file=utility.generateReport("Address_Proof_Affidavit_Drafting.jrxml","Address_Proof_Affidavit_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']          
+         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
         
 api.add_resource(GenerateAPA,'/generateAPA')        
 docs.register(GenerateAPA)
@@ -259,18 +273,20 @@ docs.register(GenerateAPA)
 class GenerateCNMA(MethodResource, Resource):
     @doc(description="Change Of Name Of Minor Affidavit Drafting", tags=['Change Of Name Of Minor Affidavit Drafting API'])
     @use_kwargs(schema.CNMARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-        try:
+         try:
             print("generateCNMA")
             parameters=kwargs  
             db_conn=""
          
-            utility.generateReport("Change_Of_Name_Of_Minor_Affidavit_Drafting.jrxml","Change_Of_Name_Of_Minor_Affidavit_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-        except Exception as e:
+            output_file=utility.generateReport("Change_Of_Name_Of_Minor_Affidavit_Drafting.jrxml","Change_Of_Name_Of_Minor_Affidavit_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']       
+         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
         
 api.add_resource(GenerateCNMA,'/generateCNMA')        
 docs.register(GenerateCNMA)
@@ -279,18 +295,20 @@ docs.register(GenerateCNMA)
 class GenerateDOBA(MethodResource, Resource):
     @doc(description="Proof Of Date Of Birth Affidavit Drafting", tags=['Proof Of Date Of Birth Affidavit Drafting API'])
     @use_kwargs(schema.DOBARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-        try:
+         try:
             print("generateDOBA")
             parameters=kwargs  
             db_conn=""
          
-            utility.generateReport("Proof_Of_Date_Of_Birth_Affidavit_Drafting.jrxml","Proof_Of_Date_Of_Birth_Affidavit_Drafting",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-        except Exception as e:
+            output_file=utility.generateReport("Proof_Of_Date_Of_Birth_Affidavit_Drafting.jrxml","Proof_Of_Date_Of_Birth_Affidavit_Drafting",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']       
+         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
         
 api.add_resource(GenerateDOBA,'/generateDOBA')        
 docs.register(GenerateDOBA)
@@ -299,19 +317,21 @@ docs.register(GenerateDOBA)
 class GenerateLLA(MethodResource, Resource):
     @doc(description="Leave & License Agreement", tags=['Leave License Agreement API'])
     @use_kwargs(schema.LLARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateLLA")
           parameters=kwargs  
           db_conn=utility.getDbConnection("json_request.json","licensors","licensees",parameters['licensors'],parameters['licensees'])
           del parameters['licensors']
           del parameters['licensees']
-          utility.generateReport("leave_license_agrmt.jrxml","Leave_and_License_Agreement",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("leave_license_agrmt.jrxml","Leave_and_License_Agreement",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 
 api.add_resource(GenerateLLA, '/generateLLA')
@@ -320,16 +340,18 @@ docs.register(GenerateLLA)
 class GenerateICA(MethodResource, Resource):
     @doc(description="Income Certificate Affidavit", tags=['Income Certificate Affidavit-API'])
     @use_kwargs(schema.ICARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateICA")
           parameters=kwargs  
-          utility.generateReport("Income_cert_affidavit.jrxml","Income Certificate Affidavit",parameters,"") 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("Income_cert_affidavit.jrxml","Income Certificate Affidavit",parameters,"") 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateICA, '/generateICA')
 docs.register(GenerateICA)
@@ -338,16 +360,18 @@ docs.register(GenerateICA)
 class GenerateMCA(MethodResource, Resource):
     @doc(description="Marriage Certificate Affidavit", tags=['Marriage Certificate Affidavit-API'])
     @use_kwargs(schema.MCARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateMCA")
           parameters=kwargs  
-          utility.generateReport("marriage_affidavit.jrxml","Marriage Certificate Affidavit",parameters,"") 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("marriage_affidavit.jrxml","Marriage Certificate Affidavit",parameters,"") 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 
 
@@ -358,19 +382,21 @@ docs.register(GenerateMCA)
 class GenerateCSA(MethodResource, Resource):
     @doc(description="Claim Settlement Affidavit in Bank", tags=['Claim Settlement Affidavit in Bank - API'])
     @use_kwargs(schema.CSARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateCSA")
           parameters=kwargs  
           db_conn=utility.getDbConnection("claimant_json.json","claimants","receiving_claimants",parameters['claimants'],parameters['receiving_claimants'])
           del parameters['claimants']
           del parameters['receiving_claimants']
-          utility.generateReport("claim_settlement_affidavit.jrxml","Claim_Settlement_Affidavit",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("claim_settlement_affidavit.jrxml","Claim_Settlement_Affidavit",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateCSA, '/generateCSA')
 docs.register(GenerateCSA)
@@ -378,16 +404,18 @@ docs.register(GenerateCSA)
 class GenerateNAD(MethodResource, Resource):
     @doc(description="Newspaper Ad Drafting", tags=['Newspaper Ad Drafting-API'])
     @use_kwargs(schema.NADRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateNAD")
           parameters=kwargs  
-          utility.generateReport("newspaper_ad_drafting.jrxml","Newspaper Ad Drafting",parameters,"") 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("newspaper_ad_drafting.jrxml","Newspaper Ad Drafting",parameters,"") 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 
 api.add_resource(GenerateNAD, '/generateNAD')
@@ -396,19 +424,21 @@ docs.register(GenerateNAD)
 class GenerateCCD(MethodResource, Resource):
     @doc(description="Consumer Complaint Drafting", tags=['Consumer Complaint Drafting-API'])
     @use_kwargs(schema.CCDRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateCCD")
           parameters=kwargs             
           db_conn=utility.getDbConnection("complainantopponent.json","complainants","opponents",parameters['complainants'],parameters['opponents'])
           del parameters['complainants']
           del parameters['opponents']
-          utility.generateReport("Consumer_Complaints_Drafting.jrxml","Consumer Complaint Drafting",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("Consumer_Complaints_Drafting.jrxml","Consumer Complaint Drafting",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateCCD, '/generateCCD')
 docs.register(GenerateCCD)
@@ -416,17 +446,19 @@ docs.register(GenerateCCD)
 class GenerateGDD(MethodResource, Resource):
     @doc(description="Gift Deed Drafting", tags=['Gift Deed'])
     @use_kwargs(schema.GDDRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateGDD")
           parameters=kwargs             
           db_conn=""
-          utility.generateReport("Gift_Deed_Drafting.jrxml","Gift_Deed_Drafting",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("Gift_Deed_Drafting.jrxml","Gift_Deed_Drafting",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateGDD, '/generateGDD')
 docs.register(GenerateGDD)
@@ -434,17 +466,19 @@ docs.register(GenerateGDD)
 class GenerateNDA(MethodResource, Resource):
     @doc(description="Non Disclosure Agreement", tags=['NDA Drafting'])
     @use_kwargs(schema.NDARequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateNDA")
           parameters=kwargs             
           db_conn=""
-          utility.generateReport("NON_DISCLOSURE_AGREEMENT.jrxml","NON_DISCLOSURE_AGREEMENT",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("NON_DISCLOSURE_AGREEMENT.jrxml","NON_DISCLOSURE_AGREEMENT",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateNDA, '/generateNDA')
 docs.register(GenerateNDA)
@@ -452,17 +486,19 @@ docs.register(GenerateNDA)
 class GenerateJobOffer(MethodResource, Resource):
     @doc(description="Job Offer And Agreement", tags=['Job Offer And Agreement Drafting'])
     @use_kwargs(schema.JobOfferRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
-       try:
+      try:
           print("generateJobOffer")
           parameters=kwargs             
           db_conn=""
-          utility.generateReport("Job_Offer.jrxml","Job_Offer",parameters,db_conn) 
-          return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
-       except Exception as e:
+          output_file=utility.generateReport("Job_Offer.jrxml","Job_Offer",parameters,db_conn) 
+          s = schema.FileSchema()
+          result = s.dump({'file': output_file})
+          return result['file']       
+      except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.FileSchema().dump({'file':'excpetion occured'}),404
 
 api.add_resource(GenerateJobOffer, '/generateJobOffer')
 docs.register(GenerateJobOffer)
@@ -471,17 +507,20 @@ docs.register(GenerateJobOffer)
 class GenerateQRD(MethodResource,Resource):
     @doc(description="Quick Rent Agreement Drafting",tags=['Quick Rental Drafting API'])
     @use_kwargs(schema.QRDRequest,location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self ,**kwargs):
       try:
-         print("generateJobOffer")
+         print("generateQRD")
          parameters=kwargs             
          db_conn=""
-         utility.generateReport("House_Rental_Drafting.jrxml","House_Rental_drafting",parameters,db_conn) 
-         return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+         output_file=output_file=utility.generateReport("House_Rental_Drafting.jrxml","House_Rental_drafting",parameters,db_conn) 
+         s = schema.FileSchema()
+         result = s.dump({'file': output_file})
+         return result['file']         
+        
       except Exception as e:
           print(str(e))
-          return schema.APIResponse().dump(dict(message="not generated")), 404
+          return schema.dump({'file':'excpetion occured'})
         
 api.add_resource(GenerateQRD,'/generateQRD')        
 docs.register(GenerateQRD)
@@ -492,19 +531,19 @@ docs.register(GenerateQRD)
 class GenerateNLT(MethodResource, Resource):
     @doc(description="NOC Landlord Template", tags=['NOC Landlord Template API'])
     @use_kwargs(schema.NLTRequest, location=('json'))
-    @marshal_with(schema.APIResponse)
+    @marshal_with(schema.FileSchema)
     def post(self, **kwargs):
         try:
             print("generateNLT")
             parameters=kwargs  
             db_conn=""
          
-            utility.generateReport("NOC_Landlord_Template.jrxml","NOC_Landlord_Template",parameters,db_conn) 
-            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+            output_file=utility.generateReport("NOC_Landlord_Template.jrxml","NOC_Landlord_Template",parameters,db_conn) 
+            s = schema.FileSchema()
+            result = s.dump({'file': output_file})
+            return result['file']       
         except Exception as e:
             print(str(e))
-            return schema.APIResponse().dump(dict(message="not generated")), 404
-        
+            return schema.FileSchema().dump({'file':'excpetion occured'}),404
 api.add_resource(GenerateNLT,'/generateNLT')        
 docs.register(GenerateNLT)
-
