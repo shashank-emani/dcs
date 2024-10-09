@@ -1,5 +1,6 @@
 from app import *
 from marshmallow import Schema, fields
+from flask import send_file
 
 class lessor_list(Schema):
    lessorname=fields.Str(default='')
@@ -469,7 +470,15 @@ class NLTRequest(Schema):
    ContactInformation=fields.Str(default="ContactInformation")
 
 class APIResponse(Schema):
-   message=fields.String(default="")
+   message=fields.Str(default="")
+
+
+class PDFField(fields.Field):
+    def _serialize(self, value, attr, obj, **kwargs):
+        return send_file(value, as_attachment=True)
+
+class FileSchema(Schema):
+    file = PDFField()   
 
 
 
