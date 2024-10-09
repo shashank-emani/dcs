@@ -451,7 +451,26 @@ class QRDRequest(Schema):
    to=fields.Str(default="1-09-2024")
    monthlyrent=fields.Str(default="30000")
    deposit=fields.Str(default="100000") 
-    
+
+class NLTRequest(Schema):
+   InsertDate=fields.Str(default="InsertDate")
+   LandlordsFullName=fields.Str(default="LandlordsFullName")
+   LandlordsFathersName=fields.Str(default="LandlordsFathersName")
+   LandlordsFullAddress=fields.Str(default="LandlordsFullAddress")
+   RentalPropertyAddress=fields.Str(default="RentalPropertyAddress")
+   TenantsFullName=fields.Str(default="TenantsFullName")
+   TenantsFathersName=fields.Str(default="TenantsFathersName")
+   TenantsCurrentAddress=fields.Str(default="TenantsCurrentAddress")
+   StartDateofLeaseAgreement=fields.Str(default="StartDateofLeaseAgreement")
+   purposeoftheNOC_eg=fields.Str(default="purposeoftheNOC_e.g")
+   specificpurposeoftheNOC_eg_applying=fields.Str(default="specificpurposeoftheNOC_e.g.applying")
+   residential_commercial_officespace_etc=fields.Str(default="residential_commercial_office space_etc")
+   foraloan_businessregistration_passportapplication_etc=fields.Str(default="foraloan_businessregistration_passportapplication_etc")
+   ContactInformation=fields.Str(default="ContactInformation")
+
 class APIResponse(Schema):
    message=fields.String(default="")
+
+
+
 

@@ -486,3 +486,25 @@ class GenerateQRD(MethodResource,Resource):
 api.add_resource(GenerateQRD,'/generateQRD')        
 docs.register(GenerateQRD)
 
+
+
+# NOC_Landlord_Template
+class GenerateNLT(MethodResource, Resource):
+    @doc(description="NOC Landlord Template", tags=['NOC Landlord Template API'])
+    @use_kwargs(schema.NLTRequest, location=('json'))
+    @marshal_with(schema.APIResponse)
+    def post(self, **kwargs):
+        try:
+            print("generateNLT")
+            parameters=kwargs  
+            db_conn=""
+         
+            utility.generateReport("NOC_Landlord_Template.jrxml","NOC_Landlord_Template",parameters,db_conn) 
+            return schema.APIResponse().dump(dict(message="Report generated successfully")), 200
+        except Exception as e:
+            print(str(e))
+            return schema.APIResponse().dump(dict(message="not generated")), 404
+        
+api.add_resource(GenerateNLT,'/generateNLT')        
+docs.register(GenerateNLT)
+
