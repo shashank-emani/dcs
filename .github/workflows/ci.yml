@@ -1,0 +1,74 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see link
+# https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+name: Python application CI and upload artifacts.
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:  
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v4    
+
+      - name: Set up Python version
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+          cache: 'pip' # caching pip dependencies
+          cache-dependency-path: '**/requirements.txt'
+
+      - name: Set environment variable
+        run: echo "FORCE_JAVASCRIPT_ACTIONS_TO_NODE20=true" >> $GITHUB_ENV
+  
+      - name: Create and start virtual environment
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+      
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+        
+      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+      - name: Check for tests, if found then run tests with pytest
+        run: |
+          if ! ls tests/test_*.py 1> /dev/null 2>&1; then
+            echo "No test files found, skipping pytest."            
+            exit 0
+          else
+            pytest  
+          fi      
+
+      - name: Zip artifact for deployment
+        run: zip release.zip ./* -r
+
+      - name: Upload artifact for deployment jobs
+        uses: actions/upload-artifact@v4
+        with:
+          name: python-app
+          path: |
+            release.zip
+          # !venv/  // Enable later
+
+      # - name: Upload test results
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: test-results
+      #    path: path/to/test/results
+
+      # - name: Upload build logs
+      #  uses: actions/upload-artifact@v4
+      #  with:
+      #    name: build-logs
+      #    path: path/to/build/logs
+
+    # Use always() to always run this step to publish test results when there are test failures
+    if: ${{ always() }}
